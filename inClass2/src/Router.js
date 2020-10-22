@@ -1,34 +1,42 @@
 // In App.js in a new project
 
 import * as React from 'react';
-import { View, Text} from 'react-native';
-import { BaseRouter, NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import {View, Text} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import First from "./pages/First"
-import Second from "./pages/Second"
-
+import {Friends, Main, Post} from "./pages"
 
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-function App() {
+function MainComponent(){
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name="MainPAge" component={Main} />
+      <Stack.Screen name="PostPage" component={Post} />
+    </Stack.Navigator>
+  )
+}
 
-//Stack.Screen kaç sayfa varsa o kadar screen üreticez
+
+function Router() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator 
-        initialRouteName="First Page"
-        screenOptions={{
-          headerShown: false,
-          gestureEnabled: true
+      <Tab.Navigator
+      initialRouteName="PostPage"
+        lazy={false}
+        tabBarOptions= {{
+          activeTintColor: "purple",
         }}
       >
-        <Stack.Screen name="Firts Page" component={First} options={{title:"My Home"}}/>
-        <Stack.Screen name="Second Page" component={Second} />
-      </Stack.Navigator>
+        <Tab.Screen name="FriendsPage" component={Friends} options={{title: "Arkadaşlar"}}/>
+        <Tab.Screen name="MainComponentPage" component={MainComponent} options={{title: "Ana Sayfa"}} />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
 
-export default App;
+export default Router;
