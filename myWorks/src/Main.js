@@ -1,34 +1,36 @@
-import axios from "axios"
-import React from 'react';
-import { View, Text, Button } from 'react-native';
-
-
+import axios from 'axios';
+import React, { useState } from 'react';
+import { SafeAreaView, View, Text, Button, FlatList } from 'react-native';
 
 const Main = (props) => {
+    const [userData, setUserData] = useState([]);
 
-    let myData = []
-
-    const fetchData = () => {
-        console.log("starting fetch...")
-        axios.get("https://jsonplaceholder.typicode.com/users")
-            .then((response) => {
-                console.log(response)
-                myData = response.data;
+    const fetchData_Then = () => {
+        axios.get('https://jsonplaceholder.typicode.com/users')
+            .then(({ data }) => {
+                setUserData(data);
             })
-        console.log(myData)
-            // .catch(error => console.log(error))
-        console.log("end fetch")
     }
 
-    return(
-        <View>
-            <Text style={{fontSize:20}}>Main</Text>
-            <Button 
-                title="Fetch Data"
-                onPress={fetchData}
-            />
-        </View>
-    )
+    const fetchData_Await = async () => {
+        const { data } = await axios.get('https://jsonplaceholder.typicode.com/users');
+        setUserData(data);
+    }
+
+    return (
+        <SafeAreaView>
+            <View>
+                <Button title="Fetch Data With Then " onPress={fetchData_Then} />
+                <Button title="Fetch Data With Await " onPress={fetchData_Await} />
+
+                <FlatList
+                    data={userData}
+                    renderItem={({ item }) => <Text>{item.name}</Text>}
+                />
+
+            </View>
+        </SafeAreaView>
+    );
 }
 
 export default Main;
