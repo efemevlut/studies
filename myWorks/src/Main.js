@@ -1,36 +1,24 @@
-import axios from 'axios';
-import React, { useState } from 'react';
-import { SafeAreaView, View, Text, Button, FlatList } from 'react-native';
+import React from 'react';
+import { SafeAreaView } from 'react-native';
+import {Provider} from "react-redux";
+import { createStore } from "redux"
+
+import Component_A from './pages/Component_A';
+import Component_B from './pages/Component_B';
+
+import { reducer, initialState } from "./context"
+
+const store = createStore(reducer, initialState);
 
 const Main = (props) => {
-    const [userData, setUserData] = useState([]);
-
-    const fetchData_Then = () => {
-        axios.get('https://jsonplaceholder.typicode.com/users')
-            .then(({ data }) => {
-                setUserData(data);
-            })
-    }
-
-    const fetchData_Await = async () => {
-        const { data } = await axios.get('https://jsonplaceholder.typicode.com/users');
-        setUserData(data);
-    }
-
     return (
-        <SafeAreaView>
-            <View>
-                <Button title="Fetch Data With Then " onPress={fetchData_Then} />
-                <Button title="Fetch Data With Await " onPress={fetchData_Await} />
-
-                <FlatList
-                    data={userData}
-                    renderItem={({ item }) => <Text>{item.name}</Text>}
-                />
-
-            </View>
-        </SafeAreaView>
+        <Provider store={store}>
+            <SafeAreaView style={{ flex: 1 }}>
+                <Component_A />
+                <Component_B />
+            </SafeAreaView> 
+        </Provider>
     );
-}
+};
 
 export default Main;
